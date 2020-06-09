@@ -1,10 +1,10 @@
 ---
-page_type: sample
+page_type: sample to benchmark
 languages:
-- csharp
+- java
 products:
-- dotnet
-description: "Add 150 character max description"
+- cosmosdb
+description: "This sample will demonstrate the comparison with Spring SDK vs Async SDK of Azure Cosmos DB"
 urlFragment: "update-this-to-unique-url-stub"
 ---
 
@@ -35,19 +35,45 @@ Outline the file contents of the repository. It helps users navigate the codebas
 
 ## Prerequisites
 
-Outline the required components and tools that a user might need to have on their machine in order to run the sample. This can be anything from frameworks, SDKs, OS versions or IDE releases.
+- Access to Azure Cosmos DB
+- JAVA
+- Spring SDK
 
 ## Setup
 
-Explain how to prepare the sample once the user clones or downloads the repository. The section should outline every step necessary to install dependencies and set up any settings (for example, API keys and output folders).
+The project is having two sub projects (1) Spring & (2) Async, navigate to their respective folder and modify application.properties
 
 ## Running the sample
 
-Outline step-by-step instructions to execute the sample and see its output. Include steps for executing the sample from the IDE, starting specific services in the Azure portal or anything related to the overall launch of the code.
+To run Async application, execute the following command:
+```
+java -jar async-loadtest.jar <number of concurrent operations>
+
+```
+To run Spring application, open command/shell and navigate to the spring sample folder then execute the following command:
+```
+mvnw clean spring-boot:run
+```
 
 ## Key concepts
 
-Provide users with more context on the tools and services used in the sample. Explain some of the code that is being used and how services interact with each other.
+Following code piece will control the execution for Async
+```
+int numberOfOperations = args.length > 0 ? Integer.parseInt(args[0]) : _objConfig.NumberOfOperations;
+
+			for (int i = 0; i < numberOfOperations;) {
+				long insertLatency = objCosmos.insertDocuments(i);
+				
+				long readLatency = objCosmos.readDocuments(i);
+			
+				System.out.println(i + "\t" + insertLatency + "\t" + readLatency);
+				
+				if (i < 100)
+					i += 10;
+				else
+					i += 100;
+				}
+```
 
 ## Contributing
 
